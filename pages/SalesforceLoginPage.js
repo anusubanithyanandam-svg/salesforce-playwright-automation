@@ -13,6 +13,9 @@ class SalesforceLoginPage
 
     async login(username,password){
     await this.usernameInput.fill(username);
+    if(!(await this.passwordInput.isVisible())){
+        await this.usernameInput.press('Enter');
+    }
     await this.passwordInput.fill(password);
     await this.loginButton.click();
     }

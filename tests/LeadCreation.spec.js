@@ -4,7 +4,6 @@ const{LeadPage} = require('../pages/LeadPage');
 test('Create a New Lead in Salesforce',async({page}) =>{
     const loginPage = new SalesforceLoginPage(page);
     const leadPage = new LeadPage(page);
-    await loginPage.goto();
     await loginPage.login(process.env.SF_USERNAME,process.env.SF_PASSWORD);
     await leadPage.gotoLead();
     const LastName = 'TestLead_' + Date.now();

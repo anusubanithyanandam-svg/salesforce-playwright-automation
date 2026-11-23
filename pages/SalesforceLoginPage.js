@@ -7,7 +7,7 @@ class SalesforceLoginPage {
   }
 
   async goto() {
-    await this.page.goto('https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/',{waitUntil: 'domcontetnloaded'});
+    await this.page.goto('https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/');
   }
 
   async login(username, password) {

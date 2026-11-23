@@ -1,7 +1,7 @@
 class LeadPage{
     constructor(page){
     this.page = page;
-    this.newButton = page.getByRole('button',{name:'New'});
+    this.newButton = page.getByRole('button',{name:'New'}).first();
    this.SalutationDropdown = page.getByRole('combobox',{name:'Salutation'});
     this.FirstNameInput = page.getByPlaceholder('First Name');
     this.LastNameInput = page.getByPlaceholder('Last Name');
@@ -9,7 +9,7 @@ class LeadPage{
     this.SaveButton = page.getByRole('button',{name:'Save',exact: true});
     }
     async gotoLead() {
-    await this.page.goto('/lightning/o/Lead/list');
+    await this.page.goto('/lightning/o/Lead/list',{waitUntil: 'domcontentloaded'});
   }
   async createLead(Salutation,FirstName,LastName,Company){
     await this.newButton.click();

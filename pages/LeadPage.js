@@ -9,7 +9,7 @@ class LeadPage{
     this.SaveButton = page.getByRole('button',{name:'Save',exact: true});
     }
     async gotoLead() {
-    await this.page.goto('https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/lightning/o/Lead/new',{waitUntil: 'domcontentloaded'});
+      await this.SalutationDropdown.waitFor({ state: 'visible',timeout:30000});
   }
   async createLead(Salutation,FirstName,LastName,Company){
     

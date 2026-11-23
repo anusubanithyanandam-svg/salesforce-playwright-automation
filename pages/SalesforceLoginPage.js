@@ -36,7 +36,6 @@ class SalesforceLoginPage {
 
       const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
       await this.page.goto(frontdoorUrl);
-      await this.page.waitForURL('**/lightning/**');
       return;
     }
 

@@ -20,7 +20,7 @@ class SalesforceLoginPage {
         grant_type: 'client_credentials',
         client_id: clientId,
         client_secret: clientSecret,
-        scope: 'api web',
+        
       });
 
       const response = await fetch(tokenUrl, {

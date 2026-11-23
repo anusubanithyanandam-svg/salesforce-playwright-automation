@@ -1,6 +1,6 @@
 const{test,expect} = require('@playwright/test');
-const{SalesforceLoginPage} = require('../pages/SalesforceLoginPage/');
-const{LeadPage} = require('../pages/LeadPage/');
+const{SalesforceLoginPage} = require('../pages/SalesforceLoginPage');
+const{LeadPage} = require('../pages/LeadPage');
 test('Create a New Lead in Salesforce',async({page}) =>{
     const loginPage = new SalesforceLoginPage(page);
     const leadPage = new LeadPage(page);

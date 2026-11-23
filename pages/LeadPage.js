@@ -9,7 +9,7 @@ class LeadPage{
     this.SaveButton = page.getByRole('button',{name:'Save',exact: true});
     }
     async gotoLead() {
-      await this.SalutationDropdown.waitFor({ state: 'visible',timeout:30000});
+      await this.LastNameInput.waitFor({ state: 'visible',timeout:30000});
   }
   async createLead(Salutation,FirstName,LastName,Company){
     

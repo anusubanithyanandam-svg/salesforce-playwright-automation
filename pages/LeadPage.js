@@ -1,7 +1,7 @@
 class LeadPage{
     constructor(page){
     this.page = page;
-    this.newButton = page.locator('a[title="New"]:visible');
+    this.newButton = page.getByRole('button',{name: 'New', exact: true }).first();
    this.SalutationDropdown = page.getByRole('combobox',{name:'Salutation'});
     this.FirstNameInput = page.getByPlaceholder('First Name');
     this.LastNameInput = page.getByPlaceholder('Last Name');

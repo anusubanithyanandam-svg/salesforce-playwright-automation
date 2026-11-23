@@ -15,6 +15,7 @@ class SalesforceLoginPage {
     const clientSecret = process.env.SF_CLIENT_SECRET;
 
     if (clientId && clientSecret) {
+    
       const tokenUrl = 'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/services/oauth2/token';
       const body = new URLSearchParams({
         grant_type: 'client_credentials',
@@ -33,8 +34,9 @@ class SalesforceLoginPage {
       if (!response.ok || !data.access_token) {
         throw new Error(`Salesforce OAuth failed: ${JSON.stringify(data)}`);
       }
-
-      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
+     
+        this.instance_url = data.instance_url;
+      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/o/Lead/list')}`;
       await this.page.goto(frontdoorUrl);
       return;
     }

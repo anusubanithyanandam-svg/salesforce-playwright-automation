@@ -1,23 +1,47 @@
-class SalesforceLoginPage
-{
-    constructor(page){
+class SalesforceLoginPage {
+  constructor(page) {
     this.page = page;
     this.usernameInput = page.locator('#username');
     this.passwordInput = page.locator('#password');
-     this.loginButton = page.locator('#Login');
-    }
-    async goto(){
+    this.loginButton = page.locator('#Login');
+  }
+
+  async goto() {
     await this.page.goto('/');
+  }
+
+  async login(username, password) {
+    const clientId = process.env.SF_CLIENT_ID;
+    const clientSecret = process.env.SF_CLIENT_SECRET;
+
+    if (clientId && clientSecret) {
+      const tokenUrl = 'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/services/oauth2/token';
+      const body = new URLSearchParams({
+        grant_type: 'client_credentials',
+        client_id: clientId,
+        client_secret: clientSecret,
+      });
+
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.access_token) {
+        throw new Error(`Salesforce OAuth failed: ${JSON.stringify(data)}`);
+      }
+
+      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
+      await this.page.goto(frontdoorUrl);
+      return;
     }
 
-
-    async login(username,password){
     await this.usernameInput.fill(username);
-    if(!(await this.passwordInput.isVisible())){
-        await this.usernameInput.press('Enter');
-    }
     await this.passwordInput.fill(password);
     await this.loginButton.click();
-    }
+  }
 }
- module.exports = {SalesforceLoginPage};
+
+module.exports = { SalesforceLoginPage };

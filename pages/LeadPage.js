@@ -6,7 +6,7 @@ class LeadPage {
     this.FirstNameInput = page.locator('input[name="firstName"]');
     this.LastNameInput = page.locator('input[name="lastName"]');
     this.CompanyInput = page.locator('input[name="Company"]');
-G    this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
+    this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
   }
 
   async gotoLead() {

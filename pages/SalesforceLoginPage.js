@@ -39,11 +39,11 @@ class SalesforceLoginPage {
       }
      
       
-     this.instance_url = data.instance_url;
-      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent(retURL)}`;
-      await this.page.goto(frontdoorUrl, { waitUntil: 'domcontentloaded' });
-     
-      return;
+    this.instance_url = data.instance_url;
+const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
+await this.page.goto(frontdoorUrl, { waitUntil: 'domcontentloaded' });
+await this.page.locator('.slds-icon-waffle').waitFor({ state: 'visible', timeout: 30000 });
+return;
     }
 
     await this.usernameInput.fill(username);

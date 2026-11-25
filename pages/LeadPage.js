@@ -8,11 +8,14 @@ class LeadPage {
     this.CompanyInput = page.getByRole('textbox', { name: 'Company' });
     this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
   }
-
- async gotoLead() {
-   
-    await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
-  }
+async gotoLead() {
+  await this.page.locator('.slds-icon-waffle').click();
+  await this.page.getByPlaceholder('Search apps and items...').fill('Leads');
+  await this.page.getByRole('option', { name: 'Leads', exact: true }).click();
+  await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
+  await this.newButton.click();
+  await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
+}
 
   async createLead(Salutation, FirstName, LastName, Company) {
     await this.SalutationDropdown.click();

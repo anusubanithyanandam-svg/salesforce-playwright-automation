@@ -9,14 +9,11 @@ class LeadPage {
     this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
   }
 
-  async gotoLead() {
-    const appLauncher = this.page.getByRole('button', { name: 'App Launcher' });
-    await appLauncher.waitFor({ state: 'visible', timeout: 30000 });
-    await appLauncher.click();
-
-    const searchApps = this.page.getByPlaceholder('Search apps and items...');
-    await searchApps.fill('Leads');
-    await this.page.getByRole('option', { name: 'Leads', exact: true }).click();
+ async gotoLead() {
+    await this.page.goto('https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/lightning/o/Lead/list', {
+      waitUntil: 'domcontentloaded',
+    });
+    await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
   }
 
   async createLead(Salutation, FirstName, LastName, Company) {

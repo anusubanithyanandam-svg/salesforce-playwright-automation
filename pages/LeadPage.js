@@ -10,8 +10,8 @@ class LeadPage {
   }
 
  async gotoLead() {
-    const origin = new URL(this.pae.url()).origin;
-    await this.page.goto('${origin}/lightning/o/Lead/new',{ waitUntil: 'domcontentloaded'});
+    const origin = new URL(this.page.url()).origin;
+    await this.page.goto(`${origin}/lightning/o/Lead/new`, { waitUntil: 'domcontentloaded' });
     await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
   }
 

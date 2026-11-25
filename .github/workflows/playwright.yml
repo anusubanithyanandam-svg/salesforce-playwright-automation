@@ -24,6 +24,8 @@ jobs:
           SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
           SF_CLIENT_ID: ${{ secrets.SF_CLIENT_ID }}
           SF_CLIENT_SECRET: ${{ secrets.SF_CLIENT_SECRET }}
+          SF_REFRESH_TOKEN: ${{ secrets.SF_REFRESH_TOKEN }}
+
 
         run: npx playwright test
       - uses: actions/upload-artifact@v4

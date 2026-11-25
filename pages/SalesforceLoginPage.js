@@ -13,14 +13,16 @@ class SalesforceLoginPage {
   async login(username, password) {
     const clientId = process.env.SF_CLIENT_ID;
     const clientSecret = process.env.SF_CLIENT_SECRET;
+    const refreshToken = process.env.SF_REFRESH_TOKEN;
 
-    if (clientId && clientSecret) {
+    if (clientId && clientSecret && refreshToken) {
     
       const tokenUrl = 'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/services/oauth2/token';
       const body = new URLSearchParams({
         grant_type: 'client_credentials',
         client_id: clientId,
         client_secret: clientSecret,
+        refresh_token: refreshToken,
         
         
       });

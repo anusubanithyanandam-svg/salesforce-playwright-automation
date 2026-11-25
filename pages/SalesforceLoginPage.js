@@ -39,8 +39,9 @@ class SalesforceLoginPage {
       }
      
         this.instance_url = data.instance_url;
-      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}`;
-      await this.page.goto(frontdoorUrl,{waitUntil: 'domcontentloaded'});
+      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
+      await this.page.goto(frontdoorUrl, { waitUntil: 'networkidle' });
+      await this.page.goto(`${data.instance_url}/lightning/page/home`, { waitUntil: 'domcontentloaded' });
       return;
     }
 

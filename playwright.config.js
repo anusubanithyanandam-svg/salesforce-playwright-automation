@@ -4,6 +4,7 @@ module.exports = defineConfig({
   testDir: './tests',
   timeout: 60000,
   reporter: 'html',
+  workers: 1,
   use: {
     baseURL: 'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.lightning.force.com',
     screenshot: 'only-on-failure',

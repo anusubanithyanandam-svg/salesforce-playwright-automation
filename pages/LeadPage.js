@@ -11,7 +11,7 @@ class LeadPage {
 
  async gotoLead() {
     await this.page.goto(
-      'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/lightning/o/Lead/new',
+      '/lightning/o/Lead/new',
       { waitUntil: 'domcontentloaded' }
     );
     await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });

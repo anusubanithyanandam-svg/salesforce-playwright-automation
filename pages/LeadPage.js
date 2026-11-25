@@ -1,5 +1,5 @@
 class LeadPage {
- constructor(page) {
+  constructor(page) {
     this.page = page;
     this.newButton = page.getByRole('button', { name: 'New', exact: true }).first();
     this.SalutationDropdown = page.getByRole('combobox', { name: 'Salutation' });
@@ -24,6 +24,7 @@ async gotoLead() {
     await this.LastNameInput.fill(LastName);
     await this.CompanyInput.fill(Company);
     await this.SaveButton.click();
+    await this.page.locator('.toastMessage').waitFor({state: 'visible',timeout:15000});
   }
 }
 

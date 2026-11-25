@@ -10,21 +10,18 @@ class SalesforceLoginPage {
     await this.page.goto('https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/');
   }
 
-  async login(username, password,retURL = '/lightning/page/home') {
+  async login(username, password) {
     const clientId = process.env.SF_CLIENT_ID;
     const clientSecret = process.env.SF_CLIENT_SECRET;
     const refreshToken = process.env.SF_REFRESH_TOKEN;
 
     if (clientId && clientSecret && refreshToken) {
-    
       const tokenUrl = 'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/services/oauth2/token';
       const body = new URLSearchParams({
-        grant_type: 'client_credentials',
+        grant_type: 'refresh_token',
         client_id: clientId,
         client_secret: clientSecret,
         refresh_token: refreshToken,
-        
-        
       });
 
       const response = await fetch(tokenUrl, {
@@ -37,10 +34,9 @@ class SalesforceLoginPage {
       if (!response.ok || !data.access_token) {
         throw new Error(`Salesforce OAuth failed: ${JSON.stringify(data)}`);
       }
-     
-      
-    this.instance_url = data.instance_url;
-      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}`;
+
+      this.instance_url = data.instance_url;
+      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
       await this.page.goto(frontdoorUrl, { waitUntil: 'domcontentloaded' });
       await this.page.locator('.slds-icon-waffle').waitFor({ state: 'visible', timeout: 30000 });
       return;

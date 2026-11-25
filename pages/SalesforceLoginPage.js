@@ -38,10 +38,10 @@ class SalesforceLoginPage {
         throw new Error(`Salesforce OAuth failed: ${JSON.stringify(data)}`);
       }
      
-      this.instance_url = data.instance_url;
-      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
-      await this.page.goto(frontdoorUrl, { waitUntil: 'domcontentloaded' });
-      await this.page.waitForURL(/lightning\.force\.com/, { timeout: 30000 });
+     this.instance_url = data.instance_url;
+      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}`;
+      await this.page.goto(frontdoorUrl, { waitUntil: 'networkidle' });
+      await this.page.goto(`${data.instance_url}/lightning/page/home`, { waitUntil: 'domcontentloaded' });
       return;
     }
 

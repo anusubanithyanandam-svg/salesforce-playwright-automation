@@ -2,10 +2,10 @@ class LeadPage {
   constructor(page) {
     this.page = page;
     this.newButton = page.getByRole('button', { name: 'New', exact: true }).first();
-    this.SalutationDropdown = page.locator('button[aria-label^="Salutation"]');
-    this.FirstNameInput = page.locator('input[name="firstName"]');
-    this.LastNameInput = page.locator('input[name="lastName"]');
-    this.CompanyInput = page.locator('input[name="Company"]');
+    this.SalutationDropdown = page.getByRole('combobox', { name: 'Salutation' });
+    this.FirstNameInput = page.getByPlaceholder('First Name');
+    this.LastNameInput = page.getByPlaceholder('Last Name');
+    this.CompanyInput = page.getByRole('textbox', { name: 'Company' });
     this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
   }
 

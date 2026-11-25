@@ -7,6 +7,8 @@ class LeadPage {
     this.LastNameInput = page.getByRole('textbox', { name: 'Last Name' });
     this.CompanyInput = page.getByRole('textbox', { name: 'Company' });
     this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
+    this.convertButton = page.getByRole('button',{name: 'Convert' , exact:true}).first();
+    this.confirmConvertButton = page.getByRole('button',{name: 'Convert',exact:true}).last();
   }
 async gotoLead() {
   await this.page.locator('.slds-icon-waffle').click();
@@ -25,6 +27,14 @@ async gotoLead() {
     await this.CompanyInput.fill(Company);
     await this.SaveButton.click();
     await this.page.locator('.toastMessage').waitFor({state: 'visible',timeout:15000});
+  }
+
+  async convertLead(){
+    await this.convertButton.waitFor({state: 'visible',timeout: 30000});
+    await this.convertButton.click();
+    await this.confirmConvertButton.waitFor({state: 'visible',timeout:30000});
+    await this.confirmConvertButton.click();
+
   }
 }
 

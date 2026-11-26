@@ -8,8 +8,7 @@ test('Convert a Lead in salesforce', async ({ page }) => {
   const loginPage = new SalesforceLoginPage(page);
   const leadPage = new LeadPage(page);
 
-  await loginPage.goto();
-  await loginPage.login(process.env.SF_USERNAME, process.env.SF_PASSWORD);
+  await loginPage.login(process.env.SF_USERNAME, process.env.SF_PASSWORD,'/lightning/o/Lead/new');
 
   const uniqueId = Date.now();
   await leadPage.gotoLead();

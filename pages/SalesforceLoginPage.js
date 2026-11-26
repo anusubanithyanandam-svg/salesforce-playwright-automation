@@ -1,55 +1,71 @@
+const crypto = require('crypto');
+
 class SalesforceLoginPage {
   constructor(page) {
     this.page = page;
-    this.usernameInput = page.locator('#username');
-    this.passwordInput = page.locator('#password');
-    this.loginButton = page.locator('#Login');
   }
 
-  async goto() {
-    await this.page.goto('https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/', {
-      waitUntil: 'domcontentloaded',
-    });
+  createJwtAssertion(clientId, username, privateKey) {
+    const base64Url = (input) =>
+      Buffer.from(input)
+        .toString('base64')
+        .replace(/=/g, '')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_');
+
+    const header = base64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+    const payload = base64Url(
+      JSON.stringify({
+        iss: clientId,
+        sub: username,
+        aud: 'https://login.salesforce.com',
+        exp: Math.floor(Date.now() / 1000) + 180,
+      })
+    );
+
+    const unsignedToken = `${header}.${payload}`;
+    const signature = crypto
+      .createSign('RSA-SHA256')
+      .update(unsignedToken)
+      .sign(privateKey, 'base64')
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_');
+
+    return `${unsignedToken}.${signature}`;
   }
 
-  async login(username, password) {
+  async login() {
     const clientId = process.env.SF_CLIENT_ID;
-    const clientSecret = process.env.SF_CLIENT_SECRET;
+    const username = process.env.SF_USERNAME;
+    const privateKey = process.env.SF_JWT_PRIVATE_KEY;
 
-    if (clientId && clientSecret) {
-      const tokenUrl = 'https://resourceful-bear-8jaoks-dev-ed.trailblaze.my.salesforce.com/services/oauth2/token';
-      const body = new URLSearchParams({
-        grant_type: 'client_credentials',
-        client_id: clientId,
-        client_secret: clientSecret,
-      });
-
-      const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
-      });
-
-      const data = await response.json();
-      if (!response.ok || !data.access_token) {
-        throw new Error(`Salesforce OAuth failed: ${JSON.stringify(data)}`);
-      }
-
-      this.instance_url = data.instance_url;
-      const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
-      await this.page.goto(frontdoorUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-      try {
-        await this.page.locator('.slds-icon-waffle').waitFor({ state: 'visible', timeout: 60000 });
-      } catch (err) {
-        throw new Error(`Lightning did not load. Current URL: ${this.page.url()} | ${err.message}`);
-      }
-      return;
+    if (!clientId || !username || !privateKey) {
+      throw new Error('Missing SF_CLIENT_ID, SF_USERNAME, or SF_JWT_PRIVATE_KEY environment variables.');
     }
 
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
+    const assertion = this.createJwtAssertion(clientId, username, privateKey);
+
+    const tokenRes = await this.page.request.post('https://login.salesforce.com/services/oauth2/token', {
+      form: {
+        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+        assertion,
+      },
+    });
+
+    const data = await tokenRes.json();
+    if (!tokenRes.ok() || !data.access_token) {
+      throw new Error(`JWT OAuth failed: ${JSON.stringify(data)}`);
+    }
+
+    const frontdoorUrl = `${data.instance_url}/secur/frontdoor.jsp?sid=${encodeURIComponent(data.access_token)}&retURL=${encodeURIComponent('/lightning/page/home')}`;
+    await this.page.goto(frontdoorUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+    try {
+      await this.page.locator('.slds-icon-waffle').waitFor({ state: 'visible', timeout: 60000 });
+    } catch (err) {
+      throw new Error(`Lightning did not load. Current URL: ${this.page.url()} | ${err.message}`);
+    }
   }
 }
 

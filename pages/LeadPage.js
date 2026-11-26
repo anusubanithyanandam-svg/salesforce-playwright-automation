@@ -28,12 +28,16 @@ async gotoLead() {
     await this.page.locator('.toastMessage').waitFor({state: 'visible',timeout:15000});
   }
 
-  async convertLead(){
-    await this.convertButton.waitFor({state: 'visible',timeout: 30000});
+  async convertLead() {
+    await this.convertButton.waitFor({ state: 'visible', timeout: 30000 });
     await this.convertButton.click();
-    await this.confirmConvertButton.waitFor({state: 'visible',timeout:30000});
-    await this.confirmConvertButton.click();
 
+    const modal = this.page.locator('[role="dialog"]').filter({ hasText: 'Convert Lead' });
+    await modal.waitFor({ state: 'visible', timeout: 30000 });
+
+    const modalConvertBtn = modal.getByRole('button', { name: 'Convert', exact: true });
+    await modalConvertBtn.waitFor({ state: 'visible', timeout: 30000 });
+    await modalConvertBtn.click();
   }
 }
 

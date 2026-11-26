@@ -7,25 +7,39 @@ class LeadPage {
     this.LastNameInput = page.getByRole('textbox', { name: 'Last Name' });
     this.CompanyInput = page.getByRole('textbox', { name: 'Company' });
     this.SaveButton = page.getByRole('button', { name: 'Save', exact: true });
-    this.convertButton = page.getByRole('button',{name: 'Convert' , exact:true}).first();
-    this.confirmConvertButton = page.getByRole('button',{name: 'Convert',exact:true}).last();
+    this.convertButton = page.getByRole('button', { name: 'Convert', exact: true }).first();
+    this.confirmConvertButton = page.getByRole('button', { name: 'Convert', exact: true }).last();
+    this.fieldErrorText = page.getByText('Complete this field').first();
   }
-async gotoLead() {
-  const origin = new URL(this.page.url()).origin;
-  await this.page.goto(`${origin}/lightning/o/Lead/list`, { waitUntil: 'domcontentloaded', timeout: 60000 });
-  await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
-  await this.newButton.click();
-  await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
-}
+
+  async gotoLead() {
+    const origin = new URL(this.page.url()).origin;
+    await this.page.goto(`${origin}/lightning/o/Lead/list`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
+    await this.newButton.click();
+    await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
+  }
+
+  async submitEmptyLeadForm() {
+    await this.SaveButton.click();
+  }
 
   async createLead(Salutation, FirstName, LastName, Company) {
-    await this.SalutationDropdown.click();
-    await this.page.getByRole('option', { name: Salutation }).click();
-    await this.FirstNameInput.fill(FirstName);
-    await this.LastNameInput.fill(LastName);
-    await this.CompanyInput.fill(Company);
+    if (Salutation) {
+      await this.SalutationDropdown.click();
+      await this.page.getByRole('option', { name: Salutation }).click();
+    }
+    if (FirstName) {
+      await this.FirstNameInput.fill(FirstName);
+    }
+    if (LastName) {
+      await this.LastNameInput.fill(LastName);
+    }
+    if (Company) {
+      await this.CompanyInput.fill(Company);
+    }
     await this.SaveButton.click();
-    await this.page.locator('.toastMessage').waitFor({state: 'visible',timeout:15000});
+    await this.page.locator('.toastMessage').waitFor({ state: 'visible', timeout: 15000 });
   }
 
   async convertLead() {

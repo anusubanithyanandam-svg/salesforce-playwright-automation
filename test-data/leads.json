@@ -1,0 +1,18 @@
+[
+    {
+    
+        "caseName":"Create lead with Ms.Salutation",
+        "salutation":"Ms.",
+        "firstName":"Anu",
+        "lastNamePrefix":"LeadOne",
+        "companyPrefix":"TechCrop"
+    },
+{
+      "caseName":"Create lead with Mr.Salutation",
+        "salutation":"Mr.",
+        "firstName":"Karthick",
+        "lastNamePrefix":"LeadTwo",
+        "companyPrefix":"CloudSys"
+}
+
+]

@@ -5,6 +5,10 @@ class SalesforceLoginPage {
     this.page = page;
   }
 
+  async goto() {
+    // Kept for backward compatibility with existing spec files
+  }
+
   createJwtAssertion(clientId, username, privateKey) {
     const base64Url = (input) =>
       Buffer.from(input)

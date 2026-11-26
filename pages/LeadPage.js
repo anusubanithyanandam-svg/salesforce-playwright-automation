@@ -13,8 +13,7 @@ class LeadPage {
 async gotoLead() {
   await this.page.locator('.slds-icon-waffle').click();
   await this.page.getByPlaceholder('Search apps and items...').fill('Leads');
-  await this.page.getByRole('option', { name: 'Leads', exact: true }).click();
-  await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
+  await this.page.locator('a[data-label="Leads"], one-app-launcher-menu-item a').filter({ hasText: /^Leads$/ }).first().click();  await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
   await this.newButton.click();
   await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
 }

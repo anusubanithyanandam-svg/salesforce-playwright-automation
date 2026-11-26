@@ -11,9 +11,9 @@ class LeadPage {
     this.confirmConvertButton = page.getByRole('button',{name: 'Convert',exact:true}).last();
   }
 async gotoLead() {
-  await this.page.locator('.slds-icon-waffle').click();
-  await this.page.getByPlaceholder('Search apps and items...').fill('Leads');
-  await this.page.locator('a[data-label="Leads"], one-app-launcher-menu-item a').filter({ hasText: /^Leads$/ }).first().click();  await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
+  const origin = new URL(this.page.url()).origin;
+  await this.page.goto(`${origin}/lightning/o/Lead/list`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  await this.newButton.waitFor({ state: 'visible', timeout: 30000 });
   await this.newButton.click();
   await this.LastNameInput.waitFor({ state: 'visible', timeout: 30000 });
 }

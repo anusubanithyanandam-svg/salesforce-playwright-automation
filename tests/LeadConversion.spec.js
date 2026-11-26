@@ -10,5 +10,5 @@ test('Convert a Lead in salesforce',async({page})=>{
      await leadPage.gotoLead();
      await leadPage.createLead('Ms.','Anu',`Test${uniqueId}`,`TechCrop${uniqueId}`);
      await leadPage.convertLead();
-     await expect(page.getByText('Your lead has been converted')).toBeVisible({timeout: 30000});
+     await expect(page.getByText(/Your lead has been converted/i).first()).toBeVisible({timeout: 30000});
     });

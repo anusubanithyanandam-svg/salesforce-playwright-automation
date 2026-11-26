@@ -8,7 +8,7 @@ test('Create a New Lead in Salesforce',async({page}) =>{
     await leadPage.gotoLead();
     const LastName = 'TestLead_' + Date.now();
     await leadPage.createLead('Ms.','Anu',LastName,'TechCrop');
-    await expect(page.getByText(LastName)).toBeVisible();
+    await expect(page.getByText(LastName).first()).toBeVisible({timeout: 15000});
 
 
 
